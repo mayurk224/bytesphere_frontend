@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+body{
+    background-color: #1e2939;
+}
+
+.clip-custom {
+    clip-path: path("M 0 0 H 100 V 100 Q 100 50 50 50 T 0 0 Z");
+    border-radius: 16px;
+  }
+  
