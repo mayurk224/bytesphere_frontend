@@ -7,10 +7,8 @@ const AllFiles = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // 📌 Load Token from Local Storage
   const token = localStorage.getItem("token");
 
-  // 📌 Fetch Files from Database
   useEffect(() => {
     const fetchFiles = async () => {
       if (!token) {
@@ -20,9 +18,12 @@ const AllFiles = () => {
       }
 
       try {
-        const response = await axios.get("http://localhost:3248/api/files/recent-files?limit=50", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const response = await axios.get(
+          "http://localhost:3248/api/files/recent-files?limit=50",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
 
         setFiles(response.data.files);
       } catch (err) {
@@ -35,7 +36,6 @@ const AllFiles = () => {
     fetchFiles();
   }, [token]);
 
-  // 📌 Categorize Files
   const categorizedFiles = {
     Images: [],
     Audios: [],
@@ -48,36 +48,43 @@ const AllFiles = () => {
     if (file.type.startsWith("image")) categorizedFiles.Images.push(file);
     else if (file.type.startsWith("audio")) categorizedFiles.Audios.push(file);
     else if (file.type.startsWith("video")) categorizedFiles.Videos.push(file);
-    else if (["application/pdf", "application/msword", "application/vnd.ms-excel"].includes(file.type)) categorizedFiles.Documents.push(file);
+    else if (
+      [
+        "application/pdf",
+        "application/msword",
+        "application/vnd.ms-excel",
+      ].includes(file.type)
+    )
+      categorizedFiles.Documents.push(file);
     else categorizedFiles.Other.push(file);
   });
 
   return (
-    <div className="ml-64 max-[370px]:ml-0 mt-14">
-
-      {/* 🔹 Loading & Error Messages */}
+    <div className="w-full">
       {loading && <p className="text-center text-gray-600">Loading files...</p>}
       {error && <p className="text-center text-red-500">{error}</p>}
 
       {!loading && !error && (
-        <>
-          {Object.entries(categorizedFiles).map(([category, files]) => (
-            files.length > 0 && (
-              <div key={category} className="p-3">
-                <div className="flex justify-between pr-10">
-                  <h5 className="text-xl font-bold dark:text-white">{category}</h5>
-                  <button className="text-blue-500">View All</button>
+        <div className="">
+          {Object.entries(categorizedFiles).map(
+            ([category, files]) =>
+              files.length > 0 && (
+                <div key={category} className="p-3">
+                  <div className="flex justify-between pr-10">
+                    <h5 className="text-xl font-bold dark:text-white">
+                      {category}
+                    </h5>
+                    <button className="text-blue-500">View All</button>
+                  </div>
+                  <div className="flex flex-wrap gap-5 mt-3">
+                    {files.map((file) => (
+                      <FilePreviewCard key={file.file_url} file={file} />
+                    ))}
+                  </div>
                 </div>
-                <div className="flex flex-wrap gap-5 mt-3">
-                  {files.map((file) => (
-                    <FilePreviewCard key={file.file_url} file={file} />
-                  ) 
-                  )}
-                </div>
-              </div>
-            )
-          ))}
-        </>
+              )
+          )}
+        </div>
       )}
     </div>
   );

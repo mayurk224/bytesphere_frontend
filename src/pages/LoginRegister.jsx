@@ -52,7 +52,7 @@ const LoginRegister = () => {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="flex w-full max-w-4xl bg-white shadow-lg rounded-lg overflow-hidden">
-        {/* Left Side */}
+        
         <div className="w-full md:w-1/2 p-14 max-[374px]:p-8 ">
           <h2 className="text-3xl font-semibold text-center mb-4">
             {isSignIn ? "Welcome Back" : "Create an Account"}
@@ -131,7 +131,7 @@ const LoginRegister = () => {
           </div>
         </div>
 
-        {/* Right Side */}
+        
         <div
           className="hidden md:flex w-1/2 items-center justify-center bg-blue-500"
           style={{

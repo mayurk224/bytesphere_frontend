@@ -38,7 +38,7 @@ const Profile = () => {
 
       if (response.ok) {
         setUser(data.user);
-        setUpdatedUsername(data.user.user_name); // ✅ Set initial username value
+        setUpdatedUsername(data.user.user_name);
       } else {
         console.error("Error fetching user:", data.error);
       }
@@ -59,7 +59,7 @@ const Profile = () => {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ user_name: updatedUsername }), // ✅ Send updated username
+          body: JSON.stringify({ user_name: updatedUsername }),
         }
       );
 
@@ -83,8 +83,8 @@ const Profile = () => {
 
   const handleUploadAvatar = async () => {
     if (!selectedFile) {
-        alert("Please select a file.");
-        return;
+      alert("Please select a file.");
+      return;
     }
 
     setUploading(true);
@@ -94,28 +94,30 @@ const Profile = () => {
     formData.append("avatar", selectedFile);
 
     try {
-        const response = await fetch("http://localhost:3248/api/auth/upload-avatar", {
-            method: "POST",
-            headers: { Authorization: `Bearer ${token}` }, // ✅ Do NOT set Content-Type, browser will handle it
-            body: formData,
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-            alert("Avatar updated successfully!");
-            setUser({ ...user, avatar_url: data.avatar_url });
-        } else {
-            console.error("Error uploading avatar:", data.error);
-            alert("Error uploading avatar. Please try again.");
+      const response = await fetch(
+        "http://localhost:3248/api/auth/upload-avatar",
+        {
+          method: "POST",
+          headers: { Authorization: `Bearer ${token}` },
+          body: formData,
         }
-    } catch (error) {
-        console.error("Error:", error);
-    } finally {
-        setUploading(false);
-    }
-};
+      );
 
+      const data = await response.json();
+
+      if (response.ok) {
+        alert("Avatar updated successfully!");
+        setUser({ ...user, avatar_url: data.avatar_url });
+      } else {
+        console.error("Error uploading avatar:", data.error);
+        alert("Error uploading avatar. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    } finally {
+      setUploading(false);
+    }
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">

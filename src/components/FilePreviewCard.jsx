@@ -7,12 +7,10 @@ const FilePreviewCard = ({ file }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
 
-  // Get file extension
   const getFileExtension = (filename) => {
-    return filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2);
+    return filename.slice(((filename.lastIndexOf(".") - 1) >>> 0) + 2);
   };
 
-  // Determine if file is an image
   const isImage = file.type.startsWith("image");
 
   const toggleMenu = (e) => {
@@ -35,7 +33,6 @@ const FilePreviewCard = ({ file }) => {
 
   return (
     <div className="w-64 bg-white rounded-lg shadow overflow-hidden border border-gray-200 relative">
-      {/* File Preview */}
       <div className="h-40 bg-gray-100 flex items-center justify-center relative">
         {isImage ? (
           <img
@@ -52,13 +49,16 @@ const FilePreviewCard = ({ file }) => {
         )}
       </div>
 
-      {/* File Info */}
       <div className="p-3 flex justify-between items-center">
-        <a href={file.file_url}
+        <a
+          href={file.file_url}
           target="_blank"
-          rel="noopener noreferrer" className="truncate pr-2 text-sm font-medium">{file.file_name}</a>
+          rel="noopener noreferrer"
+          className="truncate pr-2 text-sm font-medium"
+        >
+          {file.file_name}
+        </a>
 
-        {/* Menu Button */}
         <div className="relative">
           <button
             onClick={toggleMenu}
@@ -67,7 +67,6 @@ const FilePreviewCard = ({ file }) => {
             <MoreVertical className="h-4 w-4 text-gray-500" />
           </button>
 
-          {/* Dropdown Menu */}
           {menuOpen && (
             <div className="absolute bottom-full right-0 mb-1 w-36 bg-white rounded-md shadow-lg border border-gray-200 z-10 text-xs">
               <ul className="py-1">
@@ -113,15 +112,11 @@ const FilePreviewCard = ({ file }) => {
         </div>
       </div>
 
-      {/* View File Link */}
-      
-
-      {/* Overlay to close menu when clicking outside */}
       {menuOpen && <div className="fixed inset-0 z-0" onClick={closeMenu} />}
       {isModalOpen && (
-        <FolderSelectionModal 
-          isOpen={isModalOpen} 
-          onClose={() => setIsModalOpen(false)} 
+        <FolderSelectionModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
           fileName={selectedFile?.file_name}
           filePath={selectedFile?.file_url}
         />

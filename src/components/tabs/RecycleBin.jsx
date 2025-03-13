@@ -7,10 +7,8 @@ const RecycleBin = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // 📌 Load Token from Local Storage
   const token = localStorage.getItem("token");
 
-  // 📌 Fetch Deleted Files (Trash)
   useEffect(() => {
     const fetchTrashFiles = async () => {
       if (!token) {
@@ -20,9 +18,12 @@ const RecycleBin = () => {
       }
 
       try {
-        const response = await axios.get("http://localhost:3248/api/files/trash-files?limit=20", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const response = await axios.get(
+          "http://localhost:3248/api/files/trash-files?limit=20",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
 
         setFiles(response.data.files);
       } catch (err) {
@@ -36,16 +37,15 @@ const RecycleBin = () => {
   }, [token]);
 
   return (
-    <div className="ml-64 max-[370px]:ml-0 mt-14 p-3 rounded-lg">
+    <div className="">
       <h1 className="text-2xl font-bold mb-4 text-white">Recycle Bin</h1>
 
-      {/* 🔹 Loading State */}
-      {loading && <p className="text-center text-gray-600">Loading deleted files...</p>}
+      {loading && (
+        <p className="text-center text-gray-600">Loading deleted files...</p>
+      )}
 
-      {/* 🔹 Error Message */}
       {error && <p className="text-center text-red-500">{error}</p>}
 
-      {/* 🔹 Show Deleted Files */}
       {!loading && !error && files.length > 0 && (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {files.map((file) => (
@@ -54,9 +54,10 @@ const RecycleBin = () => {
         </div>
       )}
 
-      {/* 🔹 No Deleted Files Message */}
       {!loading && !error && files.length === 0 && (
-        <p className="text-center text-gray-600">No files in the Recycle Bin.</p>
+        <p className="text-center text-gray-600">
+          No files in the Recycle Bin.
+        </p>
       )}
     </div>
   );

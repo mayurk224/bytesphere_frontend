@@ -1,12 +1,12 @@
 import React from "react";
-import QuickCard from "./QuickCard";
-import FavoriteCard from "./FavoriteCard";
-import RecentFileTable from "./RecentFileTable";
-import UploadMultipleFiles from "./UploadMultipleFiles";
+import QuickCard from "../QuickCard";
+import FavoriteCard from "../FavoriteCard";
+import RecentFileTable from "../RecentFileTable";
+import UploadMultipleFiles from "../UploadMultipleFiles";
 
-const RenderComponent = () => {
+const Overview = () => {
   return (
-    <div className="ml-64 max-[370px]:ml-0 mt-14">
+    <div className="max-[370px]:ml-0">
       <div className="p-3 quickAccessSection flex justify-between">
         <div className=" flex flex-col gap-4 ">
           <div className="">
@@ -21,7 +21,7 @@ const RenderComponent = () => {
           </div>
         </div>
         <div className="">
-          <UploadMultipleFiles/>
+          <UploadMultipleFiles />
         </div>
       </div>
       <div className="favoriteSection p-3">
@@ -59,4 +59,4 @@ const RenderComponent = () => {
   );
 };
 
-export default RenderComponent;
+export default Overview;

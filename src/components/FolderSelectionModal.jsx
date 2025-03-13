@@ -12,16 +12,18 @@ const FolderSelectionModal = ({ isOpen, onClose, fileName, filePath }) => {
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    // 📌 Fetch User's Folders from API
     const fetchFolders = async () => {
       const token = localStorage.getItem("token");
       if (!token) return;
 
       setIsLoading(true);
       try {
-        const response = await axios.get("http://localhost:3248/api/files/user-folders", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const response = await axios.get(
+          "http://localhost:3248/api/files/user-folders",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         setFolders(response.data.folders);
       } catch (error) {
         console.error("Error fetching folders:", error);
@@ -65,7 +67,10 @@ const FolderSelectionModal = ({ isOpen, onClose, fileName, filePath }) => {
       alert(response.data.message);
       onClose();
     } catch (error) {
-      console.error("Error moving file:", error.response?.data?.error || error.message);
+      console.error(
+        "Error moving file:",
+        error.response?.data?.error || error.message
+      );
       alert("Failed to move file. Please try again.");
     }
   };
@@ -78,7 +83,9 @@ const FolderSelectionModal = ({ isOpen, onClose, fileName, filePath }) => {
     return (
       <div key={folder.folder_name}>
         <div
-          className={`flex items-center p-2 cursor-pointer hover:bg-gray-100 ${isSelected ? "bg-blue-100" : ""}`}
+          className={`flex items-center p-2 cursor-pointer hover:bg-gray-100 ${
+            isSelected ? "bg-blue-100" : ""
+          }`}
           style={{ paddingLeft: `${depth * 16 + 8}px` }}
           onClick={() => handleFolderSelect(folder)}
         >
@@ -90,7 +97,11 @@ const FolderSelectionModal = ({ isOpen, onClose, fileName, filePath }) => {
               }}
               className="mr-1"
             >
-              {isExpanded ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+              {isExpanded ? (
+                <ChevronDown size={16} />
+              ) : (
+                <ChevronRight size={16} />
+              )}
             </span>
           ) : (
             <span className="w-4 mr-1"></span>
@@ -100,7 +111,9 @@ const FolderSelectionModal = ({ isOpen, onClose, fileName, filePath }) => {
         </div>
 
         {hasChildren && isExpanded && (
-          <div>{folder.children.map((child) => renderFolder(child, depth + 1))}</div>
+          <div>
+            {folder.children.map((child) => renderFolder(child, depth + 1))}
+          </div>
         )}
       </div>
     );
@@ -109,15 +122,16 @@ const FolderSelectionModal = ({ isOpen, onClose, fileName, filePath }) => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg shadow-lg w-full max-w-md">
-        {/* 🔹 Modal Header */}
         <div className="flex justify-between items-center p-4 border-b">
           <h2 className="text-lg font-semibold">Select Folder</h2>
-          <button onClick={onClose} className="text-gray-500 hover:text-red-500">
+          <button
+            onClick={onClose}
+            className="text-gray-500 hover:text-red-500"
+          >
             <X size={20} />
           </button>
         </div>
 
-        {/* 🔹 File Details */}
         <div className="p-4">
           <p className="text-sm text-gray-600">
             <strong>File:</strong> {fileName}
@@ -127,7 +141,6 @@ const FolderSelectionModal = ({ isOpen, onClose, fileName, filePath }) => {
           </p>
         </div>
 
-        {/* 🔹 Folder List */}
         <div className="p-4">
           <input
             type="text"
@@ -141,23 +154,29 @@ const FolderSelectionModal = ({ isOpen, onClose, fileName, filePath }) => {
             {isLoading ? (
               <div className="p-4 text-center">Loading folders...</div>
             ) : folders.length === 0 ? (
-              <div className="p-4 text-center text-gray-500">No folders available</div>
+              <div className="p-4 text-center text-gray-500">
+                No folders available
+              </div>
             ) : (
               folders.map((folder) => renderFolder(folder))
             )}
           </div>
         </div>
 
-        {/* 🔹 Modal Actions */}
         <div className="flex justify-end gap-2 p-4 border-t">
-          <button onClick={onClose} className="px-4 py-2 text-sm text-gray-700 border rounded-md hover:bg-gray-50">
+          <button
+            onClick={onClose}
+            className="px-4 py-2 text-sm text-gray-700 border rounded-md hover:bg-gray-50"
+          >
             Cancel
           </button>
           <button
             onClick={handleConfirm}
             disabled={!selectedFolder}
             className={`px-4 py-2 text-sm text-white rounded-md ${
-              selectedFolder ? "bg-blue-500 hover:bg-blue-600" : "bg-blue-300 cursor-not-allowed"
+              selectedFolder
+                ? "bg-blue-500 hover:bg-blue-600"
+                : "bg-blue-300 cursor-not-allowed"
             }`}
           >
             Select

@@ -1,48 +1,47 @@
-import React, { useEffect, useState } from 'react'
+import { DollarSign, LogOut, Settings, User } from "lucide-react";
+import React, { useEffect, useState } from "react";
 
 const Navbar = () => {
+  const [user, setUser] = useState(null);
 
-    const [user, setUser] = useState(null);
+  useEffect(() => {
+    fetchUserDetails();
+  }, []);
 
-    useEffect(() => {
-        fetchUserDetails();
-    }, []);
+  const fetchUserDetails = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.error("No token found. Logging out...");
+      handleLogout();
+      return;
+    }
 
-    const fetchUserDetails = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) {
-          console.error("No token found. Logging out...");
-          handleLogout();
-          return;
+    try {
+      const response = await fetch("http://localhost:3248/api/auth/user", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      const data = await response.json();
+
+      if (response.status === 401) {
+        console.warn("Token expired. Logging out user...");
+        handleLogout();
+        return;
       }
-  
-      try {
-          const response = await fetch("http://localhost:3248/api/auth/user", {
-              method: "GET",
-              headers: { 
-                  "Authorization": `Bearer ${token}`, 
-                  "Content-Type": "application/json"
-              }
-          });
-  
-          const data = await response.json();
-          
-          if (response.status === 401) {
-              console.warn("Token expired. Logging out user...");
-              handleLogout();
-              return;
-          }
-  
-          if (response.ok) {
-              setUser(data.user);
-          } else {
-              console.error("Error fetching user:", data.error);
-          }
-      } catch (error) {
-          console.error("Error:", error);
+
+      if (response.ok) {
+        setUser(data.user);
+      } else {
+        console.error("Error fetching user:", data.error);
       }
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
-  
 
   const handleLogout = async () => {
     try {
@@ -54,132 +53,75 @@ const Navbar = () => {
       const data = await response.json();
       console.log(data.message);
 
-      // ✅ Remove user data & token from localStorage
       localStorage.removeItem("token");
 
-      // ✅ Redirect to login page
       window.location.href = "/auth";
     } catch (error) {
       console.error("Error during logout:", error);
     }
   };
 
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
+
   return (
-    <div className=''>
-        <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
-        <div class="px-3 py-3 lg:px-5 lg:pl-3">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center justify-start rtl:justify-end">
-              <button
-                data-drawer-target="logo-sidebar"
-                data-drawer-toggle="logo-sidebar"
-                aria-controls="logo-sidebar"
-                type="button"
-                class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+    <nav className="fixed w-full top-0 p-4 bg-gray-800 text-white border-b z-50">
+      <div className="flex justify-end">
+        <div className="relative">
+          <button
+            onClick={toggleDropdown}
+            className="focus:outline-none flex items-center"
+            aria-label="Open profile menu"
+          >
+            {user ? (
+              <img
+                className="w-8 h-8 rounded-full"
+                src={user.avatar_url}
+                alt="user photo"
+              />
+            ) : (
+              <p>loading...</p>
+            )}
+          </button>
+
+          {dropdownOpen && (
+            <div className="absolute right-0 mt-2 w-52 rounded-md shadow-lg bg-gray-800 border border-gray-700 z-10">
+              <div className="px-4 py-3 border-b border-gray-700">
+                <p className="text-sm font-medium">{user && user.user_name}</p>
+                <p className="text-xs text-gray-400">{user && user.email}</p>
+              </div>
+
+              <a
+                href="#dashboard"
+                className="block px-4 py-2 hover:bg-blue-600 transition-colors flex items-center"
               >
-                <span class="sr-only">Open sidebar</span>
-                <svg
-                  class="w-6 h-6"
-                  aria-hidden="true"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    clip-rule="evenodd"
-                    fill-rule="evenodd"
-                    d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"
-                  ></path>
-                </svg>
-              </button>
-              <a href="https://flowbite.com" class="flex ms-2 md:me-24">
-                <img
-                  src="https://flowbite.com/docs/images/logo.svg"
-                  class="h-8 me-3"
-                  alt="FlowBite Logo"
-                />
-                <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">
-                  ByteSphere
-                </span>
+                <User size={16} className="mr-2" />
+                Profile
+              </a>
+
+              <a
+                href="#earnings"
+                className="block px-4 py-2 hover:bg-blue-600 transition-colors flex items-center"
+              >
+                <DollarSign size={16} className="mr-2" />
+                Theme
+              </a>
+
+              <div className="border-t border-gray-700 mt-1"></div>
+
+              <a
+                onClick={handleLogout}
+                className="block px-4 py-2 hover:bg-blue-600 transition-colors flex items-center"
+              >
+                <LogOut size={16} className="mr-2" />
+                Sign out
               </a>
             </div>
-            <div class="flex items-center">
-              <div class="flex items-center ms-3">
-                <div>
-                  <button
-                    type="button"
-                    class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
-                    aria-expanded="false"
-                    data-dropdown-toggle="dropdown-user"
-                  >
-                    <span class="sr-only">Open user menu</span>
-                    {user ? (
-                        <img
-                        class="w-8 h-8 rounded-full"
-                        src={user.avatar_url}
-                        alt="user photo"
-                      />
-                    ) : (
-                        <p>loading...</p>
-                    )}
-                  </button>
-                </div>
-                <div
-                  class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-sm shadow-sm dark:bg-gray-700 dark:divide-gray-600"
-                  id="dropdown-user"
-                >
-                  <div class="px-4 py-3" role="none">
-                    <p
-                      class="text-sm text-gray-900 dark:text-white"
-                      role="none"
-                    >
-                      { user && user.user_name}
-                    </p>
-                    <p
-                      class="text-sm font-medium text-gray-900 truncate dark:text-gray-300"
-                      role="none"
-                    >
-                      {user && user.email}
-                    </p>
-                  </div>
-                  <ul class="py-1" role="none">
-                    <li>
-                      <a
-                        href="/profile"
-                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                        role="menuitem"
-                      >
-                        Profile
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="#"
-                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                        role="menuitem"
-                      >
-                        Settings
-                      </a>
-                    </li>
-                    
-                    <li>
-                      <a
-                        onClick={handleLogout}
-                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                        role="menuitem"
-                      >
-                        Sign out
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
+          )}
         </div>
-      </nav>
-    </div>
-  )
-}
+      </div>
+    </nav>
+  );
+};
 
-export default Navbar
+export default Navbar;
