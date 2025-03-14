@@ -55,7 +55,7 @@ const Navbar = () => {
 
       localStorage.removeItem("token");
 
-      window.location.href = "/api/auth";
+      window.location.href = "/auth";
     } catch (error) {
       console.error("Error during logout:", error);
     }
