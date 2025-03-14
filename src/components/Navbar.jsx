@@ -17,7 +17,7 @@ const Navbar = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:3248/api/auth/user", {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/auth/user`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -45,7 +45,7 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     try {
-      const response = await fetch("http://localhost:3248/api/auth/logout", {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/auth/logout`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
       });

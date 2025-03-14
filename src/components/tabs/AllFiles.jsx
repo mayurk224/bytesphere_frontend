@@ -18,19 +18,24 @@ const AllFiles = () => {
       }
 
       try {
+        if (!token) {
+          throw new Error("No authentication token found.");
+        }
+      
         const response = await axios.get(
-          "http://localhost:3248/api/files/recent-files?limit=50",
+          `${import.meta.env.VITE_BACKEND_URL}/api/files/recent-files?limit=50`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-
-        setFiles(response.data.files);
+      
+        setFiles(response.data?.files || []);
       } catch (err) {
-        setError(err.response?.data?.error || "Failed to fetch files");
+        setError(err.response?.data?.error || err.message || "Failed to fetch files");
       } finally {
         setLoading(false);
       }
+      
     };
 
     fetchFiles();

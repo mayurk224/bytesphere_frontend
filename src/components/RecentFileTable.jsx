@@ -23,7 +23,7 @@ const RecentFileTable = () => {
 
     try {
       const response = await axios.get(
-        "http://localhost:3248/api/files/recent-files?limit=10",
+        `${import.meta.env.VITE_BACKEND_URL}/api/files/recent-files?limit=10`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setFiles(response.data.files);
@@ -57,7 +57,7 @@ const RecentFileTable = () => {
 
     try {
       await axios.post(
-        "http://localhost:3248/api/files/delete-multiple",
+        `${import.meta.env.VITE_BACKEND_URL}/api/files/delete-multiple`,
         { files: selectedFiles },
         { headers: { Authorization: `Bearer ${token}` } }
       );

@@ -19,7 +19,7 @@ const RecycleBin = () => {
 
       try {
         const response = await axios.get(
-          "http://localhost:3248/api/files/trash-files?limit=20",
+          `${import.meta.env.VITE_BACKEND_URL}/api/files/trash-files?limit=20`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }

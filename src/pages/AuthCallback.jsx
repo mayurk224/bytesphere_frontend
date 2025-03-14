@@ -22,7 +22,7 @@ const AuthCallback = () => {
     const handleAuthCallback = async () => {
       try {
         const response = await axios.post(
-          "http://localhost:3248/api/oauth/google-callback",
+          `${import.meta.env.VITE_BACKEND_URL}/api/oauth/google-callback`,
           { access_token: accessToken }
         );
 

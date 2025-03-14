@@ -31,7 +31,7 @@ const UploadMultipleFiles = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:3248/api/files/upload-multiple",
+        `${import.meta.env.VITE_BACKEND_URL}/api/files/upload-multiple`,
         formData,
         {
           headers: {

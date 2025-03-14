@@ -3,12 +3,10 @@ import { Folder, X } from "lucide-react";
 import axios from "axios";
 
 const CreateFolderModal = ({ isOpen, onClose }) => {
-  if (!isOpen) return null; // Prevents modal rendering when closed
+  if (!isOpen) return null;
 
   const [folderName, setFolderName] = useState("");
   const [selectedColor, setSelectedColor] = useState("blue");
-
-  // 🔹 Folder color options
   const colorOptions = [
     {
       name: "blue",
@@ -58,7 +56,7 @@ const CreateFolderModal = ({ isOpen, onClose }) => {
       }
 
       const response = await axios.post(
-        "http://localhost:3248/api/files/create-folder",
+        `${import.meta.env.VITE_BACKEND_URL}/api/files/create-folder`,
         { folderName, color: selectedColor },
         {
           headers: { Authorization: `Bearer ${token}` },

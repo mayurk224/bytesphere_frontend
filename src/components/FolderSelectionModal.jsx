@@ -19,7 +19,7 @@ const FolderSelectionModal = ({ isOpen, onClose, fileName, filePath }) => {
       setIsLoading(true);
       try {
         const response = await axios.get(
-          "http://localhost:3248/api/files/user-folders",
+          `${import.meta.env.VITE_BACKEND_URL}/api/files/user-folders`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -57,7 +57,7 @@ const FolderSelectionModal = ({ isOpen, onClose, fileName, filePath }) => {
       }
 
       const response = await axios.put(
-        "http://localhost:3248/api/files/move-file",
+        `${import.meta.env.VITE_BACKEND_URL}/api/files/move-file`,
         { fileName, currentPath: filePath, newFolderName: selectedFolder },
         {
           headers: { Authorization: `Bearer ${token}` },

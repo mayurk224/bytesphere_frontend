@@ -5,7 +5,7 @@ const OAuthButton = () => {
 
   const handleGoogleLogin = async () => {
     try {
-      const response = await axios.get("http://localhost:3248/api/oauth/google-url");
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/oauth/google-url`);
       window.location.href = response.data.url;
     } catch (error) {
       console.error("Google login error:", error);

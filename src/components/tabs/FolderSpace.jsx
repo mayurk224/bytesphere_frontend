@@ -23,7 +23,7 @@ const FolderSpace = () => {
 
       try {
         const response = await axios.get(
-          "http://localhost:3248/api/files/user-folders",
+          `${import.meta.env.VITE_BACKEND_URL}/api/files/user-folders`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -51,7 +51,7 @@ const FolderSpace = () => {
 
     try {
       const response = await axios.delete(
-        "http://localhost:3248/api/files/delete-folder",
+        `${import.meta.env.VITE_BACKEND_URL}/api/files/delete-folder`,
         {
           headers: { Authorization: `Bearer ${token}` },
           data: { folderPath },

@@ -95,7 +95,7 @@ const Profile = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:3248/api/auth/upload-avatar",
+        `${import.meta.env.VITE_BACKEND_URL}/api/auth/upload-avatar`,
         {
           method: "POST",
           headers: { Authorization: `Bearer ${token}` },
